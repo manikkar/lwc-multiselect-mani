@@ -1,0 +1,7 @@
+{
+  "name": "@wcd/k.manikanta.reddy@accenture.com.lwc-l8cmn032",
+  "version": "0.0.0",
+  "scripts": {
+    "serve": "npx wcd-cli@latest serve h3QLT4uWbk0DDEuWYgsx --open"
+  }
+}

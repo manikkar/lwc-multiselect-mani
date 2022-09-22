@@ -1,0 +1,25 @@
+<template>
+	<div class="slds-m-horizontal_xx-small slds-m-bottom_x-small">
+		<div class="slds-border_bottom slds-p-around_xx-small">
+			<lightning-input type="checkbox" label="Select All" data-checkall="checkall" onchange={handleselectAll}>
+			</lightning-input>
+		</div>
+		<template if:true={options} for:each={options} for:item="option">
+			<div key={option.value} class="slds-grid slds-p-around_xx-small">
+				<div class="slds-col" style="width:50%">
+					<span>
+						<lightning-input type="checkbox" data-all-options="toggle" data-label={option.label}
+							data-value={option.value} label={option.label} onchange={handleOptionselection}>
+						</lightning-input>
+					</span>
+				</div>
+				<div class="slds-col">
+					<span style="float:right">
+						<lightning-badge label="Alpha" icon-name="standard:event" class="slds-badge slds-theme_success">
+						</lightning-badge>
+					</span>
+				</div>
+			</div>
+		</template>
+	</div>
+</template>
