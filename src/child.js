@@ -1,39 +1,32 @@
 import { LightningElement, api,track } from "lwc";
 export default class Child extends LightningElement {
-    @api selectedOptions = ['2','3'];
-   @track changedOptions = [
-      {label: 'Monday',value: '1',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
-      {label: 'Tuesday',value: '2' ,status:'Pending',icon:'standard:task2',variant:'slds-badge slds-theme_warning'},
-      {label: 'Wednesday',value: '3' ,status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
-      {label: 'Thursday',value: '4',status:'Not Started',icon:'standard:task2',variant:'slds-badge slds-theme_error'},
-      {label: 'Friday',value: '5',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
-      {label: 'Saturday',value: '6',status:'Pending',icon:'standard:task2',variant:'slds-badge slds-theme_warning'},
-      {label: 'Sunday',value: '7',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},  
-   ];  
- 
-   @track options = [];
-   @track iconName = 'standard:account';
+    @api selectedOptions;
+   @api options;  
+   @api iconName = 'standard:account';
    @api labelName;
-    
-    
+   @api enableFreeText = false;
+
+
+    @track previousValues = [];   
+    @track runningOptions = [];
     searchInput ='';   
     isDialogDisplay = false; 
     isDisplayMessage = false; 
+    _showFreeText = false;
+freeText;
 
-    get globalSelectedItems(){
-      let temp = this.changedOptions.filter(e=> e.ischecked === true);
-      return temp;
-    }
-
+    
     connectedCallback(){
-        this.changedOptions = this.changedOptions.map(ele =>{
+        this.options = this.options.map(ele =>{
           return {
             ...ele,
             ischecked : this.selectedOptions && this.selectedOptions.indexOf(ele.value)>-1 ? true :false
           }
         })
 
-        this.options = this.changedOptions;
+        this.runningOptions =[].concat(this.options)
+        // to reset values while closing
+        this.previousValues = [].concat(this.options);
     }  
     
 
@@ -45,46 +38,77 @@ export default class Child extends LightningElement {
     onchangeSearchInput(event){
         this.searchInput = event.target.value;
         if(this.searchInput.trim().length>0){         
-          this.options = this.changedOptions.filter(ele => ele.label.includes(this.searchInput));
+          this.runningOptions = this.options.filter(ele => ele.label.includes(this.searchInput));
         }else if(!this.searchInput){
-          this.options = this.changedOptions;
+          this.runningOptions = this.options;
           this.isDisplayMessage = false;
           this.isDialogDisplay = true
         }
-
-        if(this.options.length === 0 ){ 
+        if(this.runningOptions.length === 0 ){ 
             this.isDialogDisplay = false;
             this.isDisplayMessage = true;
         }       
     }
 
   handleselectAll(event){  
-      for( const opt of this.changedOptions){
+      for( const opt of this.options){
         opt.ischecked = event.target.checked;
       }
+      this.runningOptions =[].concat(this.options);
   }
 
   handleOptionselection(event){
-      let temp = this.changedOptions.map(e =>e.value === event.currentTarget.dataset.value
-      ? { ...e, ischecked: event.target.checked }: e );
+      this.options = this.options.map(e =>e.value === event.currentTarget.dataset.value
+      ? { ...e, ischecked: event.target.checked }: e );  
 
-      this.changedOptions = temp   
+      this.runningOptions = this.options;
 }
+
+
+handleOtheroption(event){
+  this._showFreeText = event.target.checked;
+}
+handleFreeText(event){
+  this.freeText = event.target.value;  
+}
+addNewValuetoList(){
+  if(this.freeText){
+    this.options.push({label : this.freeText, value : this.freeText ,ischecked:true});
+    this.runningOptions = [].concat(this.options);
+    const toggle = this.template.querySelectorAll('[data-other^="other"]');
+    toggle[0].checked = this._showFreeText = false;
+    this.freeText = '';
+  }    
+}
+
+get globalSelectedItems(){     
+      return this.options.filter(e=> e.ischecked === true);
+    }
 
 handleCancelClick(){
    this.isDialogDisplay = false;
+   this.options = [].concat(this.previousValues);
+   this.runningOptions = [].concat(this.previousValues)
 }
 
 handleDoneClick(){      
-    console.log('Final data after',JSON.parse(JSON.stringify(this.globalSelectedItems)));
     this.isDialogDisplay = false;
+    this.callDispatchEvent();
 }
+
 
 handlePillRemoveRecord(event){
-   let temp = this.changedOptions.map(e =>e.value === event.currentTarget.dataset.value
+   this.options = this.options.map(e =>e.value === event.currentTarget.dataset.value
       ? { ...e, ischecked: false }: e );
-
-      this.changedOptions = temp  
+    this.runningOptions = this.options;
+     this.callDispatchEvent();
 }
+
+callDispatchEvent(){    
+        const evtCustomEvent = new CustomEvent('selected', {   
+            detail: this.globalSelectedItems
+            });
+        this.dispatchEvent(evtCustomEvent);
+ }
 
 }

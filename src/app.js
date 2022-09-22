@@ -1,27 +1,22 @@
 import { LightningElement } from "lwc";
 
 export default class App extends LightningElement {
-  title = "Welcome to Lightning Web Components!";
 
-  showFeatures = true;
-
-  /**
-   * Getter for the features property
-   */
-  get features() {
-    return [
-      {
-        label: "Learn in the browser.",
-        icon: "utility:edit",
-      },
-      {
-        label: "View changes to code instantly with Live Compilation.",
-        icon: "utility:refresh",
-      },
-      {
-        label: "Style your components with SLDS.",
-        icon: "utility:brush",
-      },
-    ];
+   selectedOptions  = ['2','3','4'];
+   changedOptions = [
+      {label: 'Monday',value: '1',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
+      {label: 'Tuesday',value: '2' ,status:'Pending',icon:'standard:task2',variant:'slds-badge slds-theme_warning'},
+      {label: 'Wednesday',value: '3' ,status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
+      {label: 'Thursday',value: '4',status:'Not Started',icon:'standard:task2',variant:'slds-badge slds-theme_error'},
+      {label: 'Friday',value: '5',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},
+      {label: 'Saturday',value: '6',status:'Pending',icon:'standard:task2',variant:'slds-badge slds-theme_warning'},
+      {label: 'Sunday',value: '7',status:'Completed',icon:'standard:task2',variant:'slds-badge slds-theme_success'},  
+   ];   
+  
+   iconName = 'standard:task2';
+   labelName = 'Custom Multi-Select Picklist';
+    
+  handleSelectedValues(event){
+    console.log('json',JSON.parse(JSON.stringify(event.detail)))
   }
 }

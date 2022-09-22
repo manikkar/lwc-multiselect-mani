@@ -15,9 +15,9 @@
 						role="none">
 						<template if:true={globalSelectedItems} for:each={globalSelectedItems} for:item="selectedItem">
 							<span key={selectedItem.value}>
-                                <lightning-pill label={selectedItem.label} name={selectedItem.value} data-value={selectedItem.value}
-                                    onremove={handlePillRemoveRecord}>
-                                    <lightning-icon icon-name={iconName} variant="circle" 
+                                <lightning-pill label={selectedItem.label} name={selectedItem.value}
+                                    data-value={selectedItem.value} onremove={handlePillRemoveRecord}>
+                                    <lightning-icon icon-name={iconName} variant="circle"
                                         alternative-text={selectedItem.label}></lightning-icon>
                                 </lightning-pill>
                             </span>
@@ -37,21 +37,43 @@
 												onchange={handleselectAll}>
 											</lightning-input>
 										</div>
-										<template if:true={options} for:each={options} for:item="option">
+										<template if:true={runningOptions} for:each={runningOptions} for:item="option">
 											<div key={option.value} class="slds-grid slds-p-around_xx-small">
 												<div class="slds-col" style="width:50%">
 													<span>
-						<lightning-input type="checkbox" checked={option.ischecked} data-all-options="toggle" data-label={option.label}
-							data-value={option.value} label={option.label} onchange={handleOptionselection}>
-						</lightning-input>
-					</span>
+                                                        <lightning-input type="checkbox" checked={option.ischecked}
+                                                            data-all-options="toggle" data-label={option.label}
+                                                            data-value={option.value} label={option.label}
+                                                            onchange={handleOptionselection}>
+                                                        </lightning-input>
+                                                    </span>
 												</div>
 												<div class="slds-col">
 													<span style="float:right">
-						<lightning-badge label={option.status} icon-name={option.icon} class={option.variant}>
-						</lightning-badge>
-					</span>
+                                                        <lightning-badge label={option.status} icon-name={option.icon}
+                                                            class={option.variant}>
+                                                        </lightning-badge>
+                                                    </span>
 												</div>
+											</div>
+										</template>
+										<template if:true={enableFreeText}>
+											<div class="slds-border_top slds-p-around_xx-small">
+												<lightning-input type="checkbox" label="Other" data-other="other" onchange={handleOtheroption}>
+												</lightning-input>
+												<template if:true={_showFreeText}>
+													<lightning-layout>
+														<lightning-layout-item size="10">
+															<lightning-textarea name="input1" onchange={handleFreeText} variant="label-hidden">
+															</lightning-textarea>
+														</lightning-layout-item>
+														<lightning-layout-item size="2">
+															<lightning-button-icon icon-name="utility:add" variant="brand" alternative-text="add"
+																class="slds-m-left_x-small" onclick={addNewValuetoList}>
+															</lightning-button-icon>
+														</lightning-layout-item>
+													</lightning-layout>
+												</template>
 											</div>
 										</template>
 									</div>
@@ -69,5 +91,4 @@
 			</div>
 		</div>
 	</div>
-
 </template>

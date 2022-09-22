@@ -1,5 +1,7 @@
 <template>
 	<div class="app slds-p-around_x-large">
-		<c-child> </c-child>
+		<c-child icon-name={iconName} enable-free-text="true" label-name={labelName} selected-options={selectedOptions}
+			options={changedOptions} onselected={handleSelectedValues}>
+		</c-child>
 	</div>
 </template>
