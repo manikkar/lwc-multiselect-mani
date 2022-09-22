@@ -5,6 +5,7 @@ export default class Child extends LightningElement {
    @api iconName = 'standard:account';
    @api labelName;
    @api enableFreeText = false;
+   @api enableSelectAll = false;
 
 
     @track previousValues = [];   
@@ -58,10 +59,16 @@ freeText;
   }
 
   handleOptionselection(event){
+       const toggle = this.template.querySelectorAll('[data-checkall^="checkall"]');      
       this.options = this.options.map(e =>e.value === event.currentTarget.dataset.value
       ? { ...e, ischecked: event.target.checked }: e );  
-
       this.runningOptions = this.options;
+      if(enableSelectAll){
+          //check for all checked or Not
+        let temp = this.options.filter(ele => ele.ischecked === false);
+        console.log('temp',temp)
+        toggle[0].checked = temp.length > 0 ? false : true; 
+      }     
 }
 
 

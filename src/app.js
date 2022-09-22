@@ -15,6 +15,8 @@ export default class App extends LightningElement {
   
    iconName = 'standard:task2';
    labelName = 'Custom Multi-Select Picklist';
+   enableFreeText = false;
+   enableSelectAll = true;
     
   handleSelectedValues(event){
     console.log('json',JSON.parse(JSON.stringify(event.detail)))

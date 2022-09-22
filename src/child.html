@@ -32,11 +32,13 @@
 								class="slds-popover slds-popover_full-width" id="popover-unique-id-02" role="dialog">
 								<div class="slds-popover__body slds-popover__body_small" id="dialog-body-id-26">
 									<div class="slds-m-horizontal_xx-small slds-m-bottom_x-small">
-										<div class="slds-border_bottom slds-p-around_xx-small">
-											<lightning-input type="checkbox" label="Select All" data-checkall="checkall"
-												onchange={handleselectAll}>
-											</lightning-input>
-										</div>
+										<template if:true={enableSelectAll}>
+											<div class="slds-border_bottom slds-p-around_xx-small">
+												<lightning-input type="checkbox" label="Select All" data-checkall="checkall"
+													onchange={handleselectAll}>
+												</lightning-input>
+											</div>
+										</template>
 										<template if:true={runningOptions} for:each={runningOptions} for:item="option">
 											<div key={option.value} class="slds-grid slds-p-around_xx-small">
 												<div class="slds-col" style="width:50%">
