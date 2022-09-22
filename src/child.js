@@ -15,14 +15,13 @@ export default class Child extends LightningElement {
 
   handleOptionselection(event){
     const toggle = this.template.querySelectorAll('[data-checkall^="checkall"]');
-
     let temp = this.selectedList.filter(ele => ele.value === event.currentTarget.dataset.value);
     
     if(temp.length === 0){
       this.selectedList.push({
           label : event.currentTarget.dataset.label,
           value : event.currentTarget.dataset.value
-                          })
+          })
     }else{
         this.selectedList = this.selectedList.filter(ele => ele.value !== event.currentTarget.dataset.value);
     }
