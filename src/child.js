@@ -2,7 +2,7 @@ import { LightningElement, api,track } from "lwc";
 export default class Child extends LightningElement {
     @api selectedOptions;
    @api options;  
-   @api iconName = 'standard:account';
+   @api iconName;
    @api labelName;
    @api enableFreeText = false;
    @api enableSelectAll = false;
@@ -14,10 +14,11 @@ export default class Child extends LightningElement {
     isDialogDisplay = false; 
     isDisplayMessage = false; 
     _showFreeText = false;
-freeText;
+    freeText;
 
     
     connectedCallback(){
+        this.iconName = this.iconName ? this.iconName : 'standard:task2'
         this.options = this.options.map(ele =>{
           return {
             ...ele,
@@ -59,14 +60,16 @@ freeText;
   }
 
   handleOptionselection(event){
-       const toggle = this.template.querySelectorAll('[data-checkall^="checkall"]');      
+      const toggle = this.template.querySelectorAll('[data-checkall^="checkall"]');      
+      
       this.options = this.options.map(e =>e.value === event.currentTarget.dataset.value
       ? { ...e, ischecked: event.target.checked }: e );  
+      
       this.runningOptions = this.options;
-      if(enableSelectAll){
+      
+      if(this.enableSelectAll){
           //check for all checked or Not
         let temp = this.options.filter(ele => ele.ischecked === false);
-        console.log('temp',temp)
         toggle[0].checked = temp.length > 0 ? false : true; 
       }     
 }
@@ -82,6 +85,7 @@ addNewValuetoList(){
   if(this.freeText){
     this.options.push({label : this.freeText, value : this.freeText ,ischecked:true});
     this.runningOptions = [].concat(this.options);
+
     const toggle = this.template.querySelectorAll('[data-other^="other"]');
     toggle[0].checked = this._showFreeText = false;
     this.freeText = '';
